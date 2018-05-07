@@ -19,15 +19,28 @@ class Calculator extends React.Component {
 
     setDisplay( num ) {
         let display;
+        
+        // if ( this.state.resetDisplay ) {
+        //     display = num;
+        //     this.setState({ display: display, resetDisplay: false });
+        //     return;
+        // } else {
+        //     display = this.state.display === '0' ? num : (this.state.display + num);
+        // }
 
-        if ( this.state.resetDisplay ) {
+        if ( this.state.resetDisplay || this.state.display === '0' ) {
             display = num;
-            this.setState({ resetDisplay: false });
+            this.setState({ 
+                display: display,
+                resetDisplay: false 
+            });
         } else {
-            display = this.state.display === '0' ? num : (this.state.display + num);
+            display = this.state.display + num;
+            this.setState({ 
+                display: this.state.display.length < 13 ? display : this.state.display 
+            });
         }
         
-        this.setState({ display: this.state.display.length < 13 ? display : this.state.display });
     }
 
     setOperator( operator ) {
@@ -60,7 +73,7 @@ class Calculator extends React.Component {
                 break;
         }
 
-        this.setState({ display: result, resetDisplay: true });
+        this.setState({ display: result, operator: '', resetDisplay: true });
     }
 
     clearDisplay() {
@@ -73,7 +86,7 @@ class Calculator extends React.Component {
     }
 
     render() {
-        console.log( this.state.resetDisplay );
+        // console.log( this.state.operator );
         return (
             <div id="calculator-container">
                 <input id="header-input" onChange={ e => this.updateHeader(e.target.value) } />
